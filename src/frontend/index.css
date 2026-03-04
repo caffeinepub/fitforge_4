@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   FitForge Design Tokens — Dark Gym Aesthetic
+   OKLCH values as raw L C H (no oklch() wrapper)
+   ============================================================ */
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/BricolageGrotesque-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sora";
+  src: url("/assets/fonts/Sora-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    /* FitForge Dark Theme — always dark */
+    --radius: 0.75rem;
+
+    /* neon-green: #39FF14 → OKLCH approx 0.87 0.31 140 */
+    --neon: 0.87 0.31 140;
+    --neon-dim: 0.70 0.25 140;
+
+    /* Backgrounds */
+    --background: 0.08 0 0;
+    --card: 0.12 0 0;
+    --popover: 0.14 0 0;
+
+    /* Foregrounds */
+    --foreground: 0.97 0 0;
+    --card-foreground: 0.97 0 0;
+    --popover-foreground: 0.97 0 0;
+
+    /* Primary = neon green */
+    --primary: 0.87 0.31 140;
+    --primary-foreground: 0.06 0 0;
+
+    /* Secondary = dark surface */
+    --secondary: 0.16 0 0;
+    --secondary-foreground: 0.97 0 0;
+
+    /* Muted */
+    --muted: 0.16 0 0;
+    --muted-foreground: 0.55 0 0;
+
+    /* Accent = slightly lighter card */
+    --accent: 0.20 0 0;
+    --accent-foreground: 0.97 0 0;
+
+    /* Destructive */
+    --destructive: 0.60 0.22 25;
+    --destructive-foreground: 0.97 0 0;
+
+    /* Border / Input */
+    --border: 0.22 0 0;
+    --input: 0.18 0 0;
+    --ring: 0.87 0.31 140;
+
+    /* Charts */
+    --chart-1: 0.87 0.31 140;
+    --chart-2: 0.70 0.18 200;
+    --chart-3: 0.80 0.20 60;
+    --chart-4: 0.65 0.22 320;
+    --chart-5: 0.55 0.15 180;
+
+    /* Sidebar */
+    --sidebar: 0.10 0 0;
+    --sidebar-foreground: 0.97 0 0;
+    --sidebar-primary: 0.87 0.31 140;
+    --sidebar-primary-foreground: 0.06 0 0;
+    --sidebar-accent: 0.16 0 0;
+    --sidebar-accent-foreground: 0.97 0 0;
+    --sidebar-border: 0.18 0 0;
+    --sidebar-ring: 0.87 0.31 140;
+  }
+
+  /* Force dark everywhere */
+  html {
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Sora", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  }
+}
+
+/* ============================================================
+   Custom Utilities
+   ============================================================ */
+@layer utilities {
+  .neon-text {
+    color: oklch(var(--neon));
+  }
+
+  .neon-border {
+    border-color: oklch(var(--neon));
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 12px oklch(var(--neon) / 0.4), 0 0 24px oklch(var(--neon) / 0.15);
+  }
+
+  .neon-glow-sm {
+    box-shadow: 0 0 8px oklch(var(--neon) / 0.35);
+  }
+
+  .card-dark {
+    background: oklch(var(--card));
+    border: 1px solid oklch(var(--border));
+    border-radius: var(--radius);
+  }
+
+  .card-darker {
+    background: oklch(0.10 0 0);
+    border: 1px solid oklch(0.18 0 0);
+    border-radius: var(--radius);
+  }
+
+  .bottom-nav-height {
+    height: 68px;
+  }
+
+  .pb-nav {
+    padding-bottom: 84px;
+  }
+}
+
+/* ============================================================
+   Mobile App Shell
+   ============================================================ */
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: oklch(var(--background));
+}
+
+/* Mobile-first max-width centering on desktop */
+.app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100dvh;
+  position: relative;
+  background: oklch(var(--background));
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(var(--border));
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(var(--neon-dim));
+}
+
+/* Progress ring animations */
+@keyframes ring-fill {
+  from { stroke-dashoffset: 100; }
+}
+
+/* Pulse glow on neon elements */
+@keyframes neon-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.neon-pulse {
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+/* Stat bar chart animation */
+@keyframes bar-rise {
+  from { height: 0; }
+}
+
+/* Streak fire animation */
+@keyframes fire-flicker {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  50% { transform: scale(1.1) rotate(2deg); }
+}
+
+.fire-icon {
+  display: inline-block;
+  animation: fire-flicker 1.5s ease-in-out infinite;
+}
+
+/* Timer display */
+.timer-display {
+  font-family: "Bricolage Grotesque", monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+}
+
+/* Input overrides for dark theme */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Smooth page transitions */
+.page-enter {
+  animation: page-slide-in 0.2s ease-out;
+}
+
+@keyframes page-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tab indicator */
+.tab-active-indicator {
+  background: oklch(var(--neon));
+  box-shadow: 0 0 8px oklch(var(--neon) / 0.6);
+}
