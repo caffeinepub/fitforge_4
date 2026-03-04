@@ -51,8 +51,9 @@ function AppContent() {
     void checkAdmin();
   }, [actor, actorLoading]);
 
-  // Loading state while initializing
-  if (isInitializing || (identity && actorLoading)) {
+  // Only block on identity initialization (fast, ~0.5s)
+  // Actor and profile load in the background with skeleton screens
+  if (isInitializing) {
     return (
       <div className="app-shell flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center gap-4">
@@ -80,26 +81,11 @@ function AppContent() {
     return <LoginScreen />;
   }
 
-  // Profile loading
-  if (profileLoading) {
-    return (
-      <div className="app-shell flex items-center justify-center min-h-screen">
-        <div className="flex flex-col items-center gap-4">
-          <img
-            src="/assets/generated/fitforge-logo-transparent.dim_120x120.png"
-            alt="FitForge"
-            className="w-16 h-16"
-          />
-          <p className="text-muted-foreground text-sm">
-            Loading your profile...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Profile error or incomplete — show onboarding
-  const needsOnboarding = profileError || !profile || !profile.name;
+  // Profile error or incomplete — show onboarding (only once actor + profile loading is done)
+  const needsOnboarding =
+    !actorLoading &&
+    !profileLoading &&
+    (profileError || !profile || !profile.name);
   if (needsOnboarding) {
     return <OnboardingScreen />;
   }
